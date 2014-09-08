@@ -61,17 +61,24 @@ end
 
 class OrangeGrove
 
-  attr_accessor :grove, :total_oranges, :soil_quality
+  attr_accessor :grove, :total_oranges, :soil_quality, :max_age
 
   def initialize(tree_num)
+    make_trees(tree_num)
+    set_max_age(soil_quality)
+  end
+
+  def make_trees(tree_num)
     @total_oranges = 0
     @grove = []
     (0..tree_num-1).collect do
       @grove.push(OrangeTree.new)
+
     end
   end
 
   def one_year_in_grove
+    #set_max_age(@soil_quality)
     @grove.each do |o|
       o.one_year_passes
       #count_all_the_oranges
@@ -89,6 +96,30 @@ class OrangeGrove
   def show_me_the_trees
     @grove.each do |n|
       puts "Tree #{@grove.index(n)}: #{n}"
+    end
+  end
+
+  def set_max_age(soil_quality)
+    if soil_quality == 1
+      @grove.each do |o|
+        o.max_age = 55
+      end
+    elsif soil_quality == 2
+      @grove.each do |o|
+        o.max_age = 50
+      end
+    elsif soil_quality == 3
+      @grove.each do |o|
+        o.max_age = 35
+      end
+    elsif soil_quality == 4
+      @grove.each do |o|
+        o.max_age = 25
+      end
+    elsif soil_quality == 5
+      @grove.each do |o|
+        o.max_age = 20
+      end
     end
   end
 
@@ -112,12 +143,15 @@ puts "How many oranges trees would you like to plant in your grove?"
 input = gets.chomp
 
 o = OrangeGrove.new(input.to_i)
+
 o.show_me_the_trees
 o.one_year_in_grove
 o.count_all_the_oranges
-#
+puts "Max Age for trees in this grove is: #{o.grove[0].max_age}"
 puts "To start, you have #{o.grove.count} trees and #{o.count_all_the_oranges} oranges."
-(1..19).each do |n|
+(1..60).each do |n|
   o.one_year_in_grove
   puts "Year #{n}: You have #{o.grove.count} trees and #{o.count_all_the_oranges} oranges."
+
 end
+puts "The soil quality has a rating of: #{o.soil_quality}"
