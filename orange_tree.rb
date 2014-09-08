@@ -27,8 +27,8 @@ class OrangeTree
     puts "There are currently #{@oranges} oranges on this tree."
   end
 
-  def height
-    puts "Your orange tree is currently #{@height} feet tall."
+  def puts_height
+    puts "Your orange tree is currently #{@height} inches tall."
 
   end
 
@@ -75,6 +75,15 @@ class OrangeGrove
       @grove.push(OrangeTree.new)
 
     end
+  end
+
+  def start
+    puts "Welcome! How many orange trees would you like to plant in your orange grove?"
+    trees = gets.chomp
+    o = OrangeGrove.new(trees.to_i)
+  end
+
+  def grow_your_trees
   end
 
   def one_year_in_grove
@@ -144,14 +153,18 @@ input = gets.chomp
 
 o = OrangeGrove.new(input.to_i)
 
-o.show_me_the_trees
-o.one_year_in_grove
-o.count_all_the_oranges
+#o.show_me_the_trees
+#o.one_year_in_grove
+#o.count_all_the_oranges
 puts "Max Age for trees in this grove is: #{o.grove[0].max_age}"
 puts "To start, you have #{o.grove.count} trees and #{o.count_all_the_oranges} oranges."
-(1..60).each do |n|
+puts "How many years would you like to age your grove?"
+print "> "
+years = gets.chomp
+(1..years.to_i).each do |n|
   o.one_year_in_grove
-  puts "Year #{n}: You have #{o.grove.count} trees and #{o.count_all_the_oranges} oranges."
+  puts "Year #{n}: You have #{o.grove.count} trees in the grove and #{o.count_all_the_oranges} oranges."
 
 end
 puts "The soil quality has a rating of: #{o.soil_quality}"
+puts "Your trees are currently #{o.grove[0].height} inches tall."
