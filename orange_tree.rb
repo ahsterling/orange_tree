@@ -13,11 +13,8 @@ class OrangeTree
     if @age < max_age
       @oranges = 0
       @age += 1
-      #puts "Current age: #{@age}"
       @height += 10
-      #puts "Current height: #{@height}"
       grow_oranges
-      #puts "Current # of oranges: #{@oranges}"
     else
       die
     end
@@ -65,7 +62,7 @@ class OrangeGrove
 
   def initialize(tree_num)
     make_trees(tree_num)
-    set_max_age(soil_quality)
+    set_max_age(set_soil_quality)
   end
 
   def make_trees(tree_num)
@@ -73,17 +70,52 @@ class OrangeGrove
     @grove = []
     (0..tree_num-1).collect do
       @grove.push(OrangeTree.new)
-
     end
+
   end
 
-  def start
-    puts "Welcome! How many orange trees would you like to plant in your orange grove?"
-    trees = gets.chomp
-    o = OrangeGrove.new(trees.to_i)
-  end
+  def grow_or_pick()
+    prompt = "Would you like to <age your trees> or <pick an orange> now?"
+    puts prompt
+    r = gets.chomp
+    while r
+      if r[0..2].downcase == "age"
+        puts "How many years would you like to age your trees?"
+        years = gets.chomp
+        years = years.to_i
+        years.times do
+          one_year_in_grove
+          count_all_the_oranges
+        end
+        puts "There are #{@grove.count} trees in your grove."
+        puts "The trees are now #{@grove[0].age} years old."
+        puts "The trees are now #{@grove[0].height} inches tall."
+        puts "There are #{@total_oranges} oranges on the trees."
+        puts "The soil quality is at a level: #{@soil_quality}"
+        puts prompt
+        r = gets.chomp
+      elsif r[0..2].downcase == "pic"
+        if @total_oranges != 0
+          @total_oranges -= 1
+          puts "Yum, that was tasty!"
+          puts "Now there are #{@total_oranges} in the grove."
+          puts prompt
+          r = gets.chomp
+        elsif @total_oranges == 0
+          puts "Sorry, there are no oranges to pick today!"
+          puts prompt
+          r = gets.chomp
+          end
+      elsif r == "exit"
+        break
+      else
+        puts "Sorry, I didn't quite understand that."
+        puts prompt
+        r = gets.chomp
+        end
+      end
+    end
 
-  def grow_your_trees
   end
 
   def one_year_in_grove
@@ -132,7 +164,7 @@ class OrangeGrove
     end
   end
 
-  def soil_quality
+  def set_soil_quality
     if @grove.count <= 10
       @soil_quality = 5
     elsif @grove.count > 10 && @grove.count <= 20
@@ -146,25 +178,11 @@ class OrangeGrove
     end
   end
 
+
+def start
+  puts "Welcome! How many orange trees would you like to plant in your orange grove?"
+  trees = gets.chomp
+  OrangeGrove.new(trees.to_i)
 end
 
-puts "How many oranges trees would you like to plant in your grove?"
-input = gets.chomp
-
-o = OrangeGrove.new(input.to_i)
-
-#o.show_me_the_trees
-#o.one_year_in_grove
-#o.count_all_the_oranges
-puts "Max Age for trees in this grove is: #{o.grove[0].max_age}"
-puts "To start, you have #{o.grove.count} trees and #{o.count_all_the_oranges} oranges."
-puts "How many years would you like to age your grove?"
-print "> "
-years = gets.chomp
-(1..years.to_i).each do |n|
-  o.one_year_in_grove
-  puts "Year #{n}: You have #{o.grove.count} trees in the grove and #{o.count_all_the_oranges} oranges."
-
-end
-puts "The soil quality has a rating of: #{o.soil_quality}"
-puts "Your trees are currently #{o.grove[0].height} inches tall."
+start.grow_or_pick
